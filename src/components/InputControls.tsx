@@ -46,7 +46,7 @@ const InputControls: React.FC<InputControlsProps> = ({ values, onChange }) => {
   return (
     <Container>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid component="div" item xs={12} md={4}>
           <FormControl fullWidth>
             <InputLabel id="country-select-label">Country</InputLabel>
             <Select
@@ -64,7 +64,7 @@ const InputControls: React.FC<InputControlsProps> = ({ values, onChange }) => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid component="div" item xs={12} md={4}>
           <TextField
             fullWidth
             id="trade-value"
@@ -75,7 +75,7 @@ const InputControls: React.FC<InputControlsProps> = ({ values, onChange }) => {
             InputProps={{ inputProps: { min: 0 } }}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid component="div" item xs={12} md={4}>
           <TextField
             fullWidth
             id="entry-date"
@@ -86,7 +86,7 @@ const InputControls: React.FC<InputControlsProps> = ({ values, onChange }) => {
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid component="div" item xs={12} md={6}>
           <FormControl fullWidth>
             <InputLabel id="transport-select-label">Mode of Transport</InputLabel>
             <Select
@@ -102,7 +102,7 @@ const InputControls: React.FC<InputControlsProps> = ({ values, onChange }) => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid component="div" item xs={12} md={6}>
           <FormControlLabel
             control={
               <Switch

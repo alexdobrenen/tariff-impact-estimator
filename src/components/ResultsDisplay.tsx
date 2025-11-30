@@ -25,7 +25,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         Tariff Impact Results
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid component="div" item xs={12} md={6}>
           <Box mb={2}>
             <Typography variant="subtitle1">Country</Typography>
             <Typography variant="h6">{countryName}</Typography>
@@ -37,7 +37,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid component="div" item xs={12} md={6}>
           <Box mb={2}>
             <Typography variant="subtitle1">Duty Rate</Typography>
             <Typography variant="h6" color="primary">
@@ -51,7 +51,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid component="div" item xs={12}>
           <Box mt={2} p={2} bgcolor="#f5f5f5" borderRadius={1}>
             <Typography variant="subtitle2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
               {details}

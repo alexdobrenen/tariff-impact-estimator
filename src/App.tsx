@@ -95,8 +95,8 @@ function App() {
           </Toolbar>
         </AppBar>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3} sx={{ width: '100%' }}>
-            <Grid sx={{ width: '100%', mt: 2 }}>
+          <Grid component="div" container spacing={3} sx={{ width: '100%' }}>
+            <Grid component="div" sx={{ width: '100%', mt: 2 }}>
               <Paper sx={{ p: 3, mb: 3 }}>
                 <Typography variant="h5" gutterBottom>
                   Estimate US Import Tariffs
@@ -104,7 +104,7 @@ function App() {
                 <InputControls values={inputs} onChange={handleInputChange} />
               </Paper>
             </Grid>
-            <Grid sx={{ width: '100%', mt: 2 }}>
+            <Grid component="div" sx={{ width: '100%', mt: 2 }}>
               <Paper sx={{ p: 3 }}>
                 <Box mb={2}>
                   <Typography variant="h6">Global Tariff Map</Typography>
@@ -120,7 +120,7 @@ function App() {
                 />
               </Paper>
             </Grid>
-            <Grid sx={{ width: '100%', mt: 2 }}>
+            <Grid component="div" sx={{ width: '100%', mt: 2 }}>
               <ResultsDisplay
                 countryCode={inputs.selectedCountry}
                 duty={results.duty}
