@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ComposableMap,
   Geographies,
@@ -13,7 +13,7 @@ import { TariffData, MapDataItem } from '../types';
 import { Geography as GeoType } from '../types/geo';
 
 // URL for the world map topojson
-const geoUrl = "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
+const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 interface ChoroplethMapProps {
   dataType: 'duty' | 'trade'; // Whether to display duty percentages or trade values
@@ -24,6 +24,8 @@ const ChoroplethMap: React.FC<ChoroplethMapProps> = ({ dataType, onCountryClick 
   const [mapData, setMapData] = useState<MapDataItem[]>([]);
   // This state is not used in the current implementation, but kept for future tooltip enhancements
   const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
+  // Ref to track if we've already logged geography data
+  const hasLoggedGeo = useRef(false);
 
   // Prepare data for the map
   useEffect(() => {
@@ -45,11 +47,33 @@ const ChoroplethMap: React.FC<ChoroplethMapProps> = ({ dataType, onCountryClick 
     });
 
     setMapData(data);
+    console.log("Map data prepared:", data);
   }, [dataType]);
+
+  // Add debug logging for GeoJSON data
+  useEffect(() => {
+    // Fetch the topojson data to examine its structure
+    fetch(geoUrl)
+      .then(response => response.json())
+      .then(data => {
+        console.log("TopoJSON/GeoJSON data loaded:", data);
+        if (data.objects && data.objects.countries) {
+          console.log("Found countries feature collection");
+        } else if (data.objects && Object.keys(data.objects)[0]) {
+          const firstKey = Object.keys(data.objects)[0];
+          console.log(`Found feature collection: ${firstKey}`);
+        }
+      })
+      .catch(error => {
+        console.error("Error loading topojson:", error);
+      });
+  }, []);
 
   const handleGeographyClick = (geo: GeoType) => {
     if (onCountryClick) {
-      onCountryClick(geo.id);
+      // Get country code from properties.ISO_A3 or fall back to geo.id
+      const countryCode = geo.properties.ISO_A3 || geo.id;
+      onCountryClick(countryCode);
     }
   };
 
@@ -70,10 +94,25 @@ const ChoroplethMap: React.FC<ChoroplethMapProps> = ({ dataType, onCountryClick 
           onMoveEnd={handleMoveEnd}
         >
           <Geographies geography={geoUrl}>
-            {({ geographies }: { geographies: GeoType[] }) =>
-              geographies.map((geo: GeoType) => {
+            {({ geographies }: { geographies: GeoType[] }) => {
+              // Debug: Log the first geography to see its structure
+              if (geographies.length > 0 && !hasLoggedGeo.current) {
+                console.log("Sample geography object:", geographies[0]);
+                hasLoggedGeo.current = true;
+              }
+
+              return geographies.map((geo: GeoType) => {
                 // Find the corresponding data for this geography
-                const d = mapData.find((s) => s.id === geo.id);
+                // The world-atlas TopoJSON uses 3-letter ISO codes in geo.properties.id (non-standard)
+                // But it also uses 3-letter ISO codes in geo.id (standard format)
+                const countryCode = geo.properties.ISO_A3 || geo.id;
+
+                // Debug the country code mapping
+                if (countryCode === "CHN" || countryCode === "USA") {
+                  console.log(`Found country ${countryCode}:`, geo.properties);
+                }
+
+                const d = mapData.find((s) => s.id === countryCode);
 
                 return (
                   <Tooltip
@@ -102,8 +141,8 @@ const ChoroplethMap: React.FC<ChoroplethMapProps> = ({ dataType, onCountryClick 
                     />
                   </Tooltip>
                 );
-              })
-            }
+              });
+            }}
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
